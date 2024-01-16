@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sn_sec_int_impl_config">
+    <sn_sec_int_impl_config action="INSERT_OR_UPDATE">
+        <configuration display_value="url">7bbbf40a8717a110ad6d43f7cebb3599</configuration>
+        <implementation display_value="Aqua Security Vulnerability Response Integration Instance">9c973a3c87ecd55003270fad0ebb3595</implementation>
+        <password_value/>
+        <sys_class_name>sn_sec_int_impl_config</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-06-09 11:00:12</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>a92c344a8717a110ad6d43f7cebb35c3</sys_id>
+        <sys_mod_count>19</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sn_sec_int_impl_config_a92c344a8717a110ad6d43f7cebb35c3</sys_update_name>
+        <sys_updated_by>farhan.mohsin</sys_updated_by>
+        <sys_updated_on>2023-07-07 14:23:14</sys_updated_on>
+        <value>https://cloud.aquasec.com/</value>
+    </sn_sec_int_impl_config>
+</record_update>

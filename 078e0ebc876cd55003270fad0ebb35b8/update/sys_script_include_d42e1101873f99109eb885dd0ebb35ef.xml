@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecAppScopeProvider</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecAppScopeProvider</name>
+        <script><![CDATA[var AquaSecAppScopeProvider = Class.create();
+AquaSecAppScopeProvider.prototype = {
+    state: {
+        //default values
+        scopeIdx: 0,
+        imagePage: 1
+    },
+
+    //almost duplicate of AquaSecImageVulsProvider
+    initialize: function(api, username, password, updatedIn, pageSize, state, started) {
+        this.api = api;
+        this.pageSize = pageSize;
+        this.hasMore = false;
+        this.updatedIn = updatedIn;
+
+        if (state != null) {
+            if ((state.scopeIdx) != undefined){
+                this.state.scopeIdx = state.scopeIdx;
+            }
+            if ((state.imagePage) != undefined){
+                this.state.imagePage = state.imagePage;
+            }
+
+            this.state.apiToken = state.apiToken;
+
+            //TODO url and expiration can be fetched from JWT token
+            this.state.apiUrl = state.apiUrl;
+            this.state.loggedInAt = state.loggedInAt;
+
+            this.state.started = state.started;
+        } else {
+            this.state.started = started + "";
+        }
+
+        var now = new Date().getTime();
+
+        var TOKEN_REFRESH_INTERVAL = 1000*60*30; //30 min
+
+        //TODO move login to separate method
+        if (this.state.apiToken && (now - state.loggedInAt < TOKEN_REFRESH_INTERVAL)) {
+            this.api.token = this.state.apiToken;
+            this.api.apiUrl = this.state.apiUrl;
+        } else {
+            this.api.login(username, password);
+
+            this.state.loggedInAt = new Date().getTime();
+
+            this.state.apiToken = this.api.token;
+            this.state.apiUrl = this.api.apiUrl;
+        }
+    },
+    getPage: function() {
+        if (!this.state.scopes) {
+            var scopes = this._getApplicationScopes(this.api);
+            this.state.scopes = scopes;
+        }
+
+        var scope = this.state.scopes[this.state.scopeIdx];
+
+        this.hasMore = this.state.scopeIdx < this.state.scopes.length - 1;
+
+        /*
+        if (appScope.name == GLOBAL) {
+            return;
+        }
+        */
+
+        var scopeImages = [];
+
+        var page = this.state.imagePage;
+
+        var response;
+
+        try {
+
+            response = this.api.getImages(undefined, undefined, this.updatedIn, scope.name, page, this.pageSize);
+            for (var imgIdx in response.items) {
+
+                var image = response.items[imgIdx];
+                var imageKey = image.registry + "@" + image.digest;
+
+                scopeImages.push(imageKey)
+
+            }
+
+            if (!response.hasMore) {
+                this.state.scopeIdx = this.state.scopeIdx + 1;
+                this.state.imagePage = 1;
+            } else {
+                this.state.imagePage = page + 1;
+            }
+
+        } catch (e) {
+            this.state.scopeIdx = this.state.scopeIdx + 1;
+            gs.error(e + "");
+        }
+
+
+        return {
+            attachments : [{
+                filename: "scopes.json",
+                payload: {
+                    scope: scope,
+                    scopeImages: scopeImages
+                }
+            }],
+            nextRunProperties: this.state,
+            hasMoreData: this.hasMore,
+            type: "scopes"
+        };
+
+
+
+
+
+
+    },
+    _getApplicationScopes: function(api) {
+        var scopes = [];
+        try {
+            var page = 1;
+
+            do {
+                response = api.getApplicationScopes(page, this.pageSize);
+                scopes=scopes.concat(response.items);
+                page++;
+            } while (response.hasMore);
+
+        } catch (e) {
+            //fall back to available scopes API (as it's available to regular users)
+            if (e.indexOf("403")>-1) {
+                scopes = api.getAvailableApplicationScopes();
+            } else {
+                throw e;
+            }
+        }
+    
+        return scopes;
+    },
+
+    type: 'AquaSecAppScopeProvider'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-12-14 11:15:32</sys_created_on>
+        <sys_id>d42e1101873f99109eb885dd0ebb35ef</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>AquaSecAppScopeProvider</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_d42e1101873f99109eb885dd0ebb35ef</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2022-12-23 13:35:49</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-01-11 08:20:37</sys_created_on>
+        <sys_id>1cb2c5c287182510ad6d43f7cebb35bd</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_aqss_vr_intgrtn_aqua_security_scopes.sn_vul.admin</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_security_acl display_value="x_aqss_vr_intgrtn_aqua_security_scopes">c9836a74875e9910ad6d43f7cebb359a</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_1cb2c5c287182510ad6d43f7cebb35bd</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-01-11 08:20:37</sys_updated_on>
+        <sys_user_role display_value="sn_vul.admin" name="sn_vul.admin">57c9b6169f93020035c6786f957fcf82</sys_user_role>
+        <transaction_id/>
+    </sys_security_acl_role>
+</record_update>

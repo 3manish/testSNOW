@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="8991dc7b97a6f510a1a07d100153af64" sys_domain="global" table="sn_vul_container_image_findings" version="3" view="aqua_security_img_findings">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>number</element>
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>39c9d87797e6f510a1a07d100153af95</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>image_repository</element>
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>31c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>cmdb_ci</element>
+            <position>2</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b1c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>vulnerability</element>
+            <position>3</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>35c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>src_ci</element>
+            <position>4</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b5c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>src_ci.registry</element>
+            <position>5</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>39c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>is_base_image</element>
+            <position>6</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b9c99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>base_docker_image</element>
+            <position>7</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>3dc99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>8</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>bdc99cb797e6f510a1a07d100153af25</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>source</element>
+            <position>9</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>31c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>status</element>
+            <position>10</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b1c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>first_found</element>
+            <position>11</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>35c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>last_found</element>
+            <position>12</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b5c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>package</element>
+            <position>13</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>39c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>image_layer</element>
+            <position>14</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>b9c99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>15</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>3dc99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>proof</element>
+            <position>16</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 08:23:21</sys_created_on>
+            <sys_id>bdc99cb797e6f510a1a07d100153af26</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="8191dc7b97a6f510a1a07d100153af5f">8991dc7b97a6f510a1a07d100153af64</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 08:23:21</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>sn_vul_container_image_findings</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-23 07:47:32</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>8991dc7b97a6f510a1a07d100153af64</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sn_vul_container_image_findings</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+            <sys_update_name>sys_ui_section_8991dc7b97a6f510a1a07d100153af64</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-23 07:47:32</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="Aqua Security(Image Finding)" name="aqua_security_img_findings">8191dc7b97a6f510a1a07d100153af5f</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="x_aqss_vr_intgrtn_x_aqss_vr_integration">
+    <x_aqss_vr_intgrtn_x_aqss_vr_integration action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <delay>0</delay>
+        <download_record_since>2023-06-16 16:11:26</download_record_since>
+        <entered_time/>
+        <instance display_value="Aqua Security Vulnerability Response Integration Instance">9c973a3c87ecd55003270fad0ebb3595</instance>
+        <integration display_value="Aqua Security Vulnerability Response Integration">ab17fef887ecd55003270fad0ebb3552</integration>
+        <integration_factory_script><![CDATA[/**
+ * This function serves to construct the integration script.
+ * The integration process record (integrationProcessGr) is provided in the event that stateful information is required. 
+ * The function should return the newly constructed script.  
+ */
+(function(integrationProcessGr) {
+    // Add any logic here to construct your integration script as necessary.
+    //var containerCOunt = new x_aqss_vr_intgrtn.AquaSecContainerCountIntegration();
+    return new x_aqss_vr_intgrtn.AquaSecContainerCountIntegration();
+    //return containerCOunt.retrieveData();
+})(integrationProcessGr);]]></integration_factory_script>
+        <integration_script display_value="AquaSecContainerCountIntegration">e963de0c87cad110ad6d43f7cebb3534</integration_script>
+        <is_template>false</is_template>
+        <name>Aqua Security Container Count Integration</name>
+        <next_integration/>
+        <offset/>
+        <offset_type>0</offset_type>
+        <processor_factory_script><![CDATA[/**
+  * This function serves to construct the report processor script.
+  * The integration process record (integrationProcessGr) is provided in the event that stateful information is required. 
+  * The function should return the newly constructed script.  
+  */
+(function(integrationProcessGr){ 
+    // Add any logic here to construct your report processor script as necessary.
+    return new sn_vul.VulnerabilityReportProcessorBase();
+})(integrationProcessGr);]]></processor_factory_script>
+        <report_processor_script display_value="VulnerabilityReportProcessorBase">08ed97539f10020034c6b6a0942e70e5</report_processor_script>
+        <report_processor_strategy>CUSTOM_PROCESSOR</report_processor_strategy>
+        <run_as/>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_separately>false</run_separately>
+        <run_start>2022-09-15 13:07:09</run_start>
+        <run_time>1970-01-01 08:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[new sn_vul.VulnerabilityIntegrationUtils().addIntegrationRun(current);]]></script>
+        <sys_class_name>x_aqss_vr_intgrtn_x_aqss_vr_integration</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-15 13:09:11</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>ffb81e4c87cad110ad6d43f7cebb3529</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>Aqua Security Container Count Integration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>x_aqss_vr_intgrtn_x_aqss_vr_integration_ffb81e4c87cad110ad6d43f7cebb3529</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-02 07:22:06</sys_updated_on>
+        <time_zone/>
+        <type/>
+        <upgrade_safe>false</upgrade_safe>
+    </x_aqss_vr_intgrtn_x_aqss_vr_integration>
+</record_update>

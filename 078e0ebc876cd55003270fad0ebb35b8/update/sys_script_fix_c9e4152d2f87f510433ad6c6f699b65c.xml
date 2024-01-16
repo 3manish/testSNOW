@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_fix">
+    <sys_script_fix action="INSERT_OR_UPDATE">
+        <before>false</before>
+        <description/>
+        <name>Aqua_registry_fix</name>
+        <record_for_rollback>true</record_for_rollback>
+        <script><![CDATA[var secConfig = new GlideRecord('sn_sec_int_impl_config');
+var sys = ['a92c344a8717a110ad6d43f7cebb35c3', 'f35b60ca87d3a110ad6d43f7cebb3508', 'ae5d1d468797a110ad6d43f7cebb3571'];
+var url1 = [];
+for (var i = 0; i < 3; i++) {
+    if (sys[i] == 'ae5d1d468797a110ad6d43f7cebb3571') {
+        url1.push(secConfig.password_value.toString());
+    } else {
+        secConfig.get(sys[i]);
+        url1.push(secConfig.value.toString());
+    }
+}
+gs.debug('url param=' + url1);
+
+var newUrl = '';
+var expression = /(https?:\/\/)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)*(\/[\/\d\w\.-]*)*(?:[\?])*(.+)*/gi
+var regex = new RegExp(expression);
+var groups = regex.exec(url1[0]);
+gs.debug('groups=' + groups);
+if (groups.length > 2) {
+    newUrl = groups[2];
+} else {
+    newUrl = 'undefined';
+}
+gs.debug('-------newUrl=' + newUrl);
+
+var loginUrl = '';
+var provUrl = '';
+if (newUrl == "cloud.aquasec.com") {
+    loginUrl = gs.getProperty('x_aqss_vr_intgrtn.saas.login.url');
+    provUrl = gs.getProperty('x_aqss_vr_intgrtn.saas.provision.url');
+
+} else if (newUrl == "eu-1.cloud.aquasec.com") {
+    loginUrl = gs.getProperty('x_aqss_vr_intgrtn.eu1.saas.login.url');
+    provUrl = gs.getProperty('x_aqss_vr_intgrtn.eu1.saas.provision.url');
+} else if (newUrl == "asia-1.cloud.aquasec.com") {
+    loginUrl = gs.getProperty('x_aqss_vr_intgrtn.asia1.saas.login.url');
+    provUrl = gs.getProperty('x_aqss_vr_intgrtn.asia1.saas.provision.url');
+} else if (newUrl == "asia-2.cloud.aquasec.com") {
+    loginUrl = gs.getProperty('x_aqss_vr_intgrtn.asia2.saas.login.url');
+    provUrl = gs.getProperty('x_aqss_vr_intgrtn.asia2.saas.provision.url');
+} else if (newUrl == "cloud-dev.aquasec.com") {
+    loginUrl = gs.getProperty('x_aqss_vr_intgrtn.staging.login.url');
+    provUrl = gs.getProperty('x_aqss_vr_intgrtn.staging.provision.url');
+} else {
+    var baseUrlPosition = newUrl.indexOf("cloud.aquasec.com");
+    if (baseUrlPosition > -1) {
+
+        var region = newUrl.substring(0, baseUrlPosition - 1);
+
+        var httpsScheme = gs.getProperty("x_aqss_vr_intgrtn.https.scheme");
+        var provisionUrlPrefix = gs.getProperty("x_aqss_vr_intgrtn.provision.url.prefix");
+        var provisionUrlSuffix = gs.getProperty("x_aqss_vr_intgrtn.provision.url.suffix");
+        var loginUrlSuffix = gs.getProperty("x_aqss_vr_intgrtn.login.url.suffix");
+        provUrl = provisionUrlPrefix + region + provisionUrlSuffix;
+        loginUrl = httpsScheme + region + loginUrlSuffix;
+    }
+}
+gs.debug('--------------loginUrl=' + loginUrl);
+gs.debug('--------------provUrl=' + provUrl);
+
+var apiAuthUrl = loginUrl + '/v2/signin';
+var payload = {};
+payload = {
+    email: url1[1],
+    password: 'Aquademo12345!'
+};
+gs.debug('----------payload=' + JSON.stringify(payload));
+var restAuthMessage = new sn_ws.RESTMessageV2();
+restAuthMessage.setHttpMethod("POST");
+restAuthMessage.setRequestHeader("Content-Type", "application/json");
+restAuthMessage.setEndpoint(apiAuthUrl);
+restAuthMessage.setRequestBody(JSON.stringify(payload));
+var response = restAuthMessage.execute();
+gs.debug('response=' + response.getBody().toString());
+var responseJson = JSON.parse(response.getBody());
+gs.debug('response.token=' + responseJson.data.token);
+
+gs.debug('-------------------------------------------');
+
+var finalUrl = provUrl.indexOf('http') == 0 ? provUrl : gs.getProperty("x_aqss_vr_intgrtn.https.scheme") + provUrl;
+var provisionApiUrl = finalUrl + "/v1/envs";
+gs.debug('provisionApiUrl=' + provisionApiUrl);
+var restEnvMessage = new sn_ws.RESTMessageV2();
+restEnvMessage.setHttpMethod("GET");
+restEnvMessage.setRequestHeader("Content-Type", "application/json");
+restEnvMessage.setLogLevel("all");
+restEnvMessage.setRequestHeader("Authorization", "Bearer " + responseJson.data.token);
+restEnvMessage.setEndpoint(provisionApiUrl);
+responseEnv = restEnvMessage.execute();
+
+var statusCode = responseEnv.getStatusCode();
+gs.debug('statusCode=' + statusCode);
+gs.debug('response==' + responseEnv.getBody());
+
+
+gs.debug('response==' + responseEnv.getBody());
+var responseEnvJson = JSON.parse(responseEnv.getBody());
+var ese_Url = responseEnvJson.data.ese_url;
+gs.debug('======ese_Url=' + responseEnvJson.data.ese_url);
+//------------------------------------------------
+//https://99c607c318.cloud.aquasec.com/api/v2/images/details/sha256:86b6af7dd652c1b38118be1c338e9354b33469e69a218f7e290a0ca5304ad681
+
+//get the image_id from 'sn_vul_container_image' table
+
+
+//var registryUrl = ese_Url + '/api/v2/images/details/sha256:158a0ce1b4c464abbbe52d1a88b8fc9b904a6580bc86f4012b0edb6e9aa92c07';
+
+
+var restRegMessage = new sn_ws.RESTMessageV2();
+restRegMessage.setHttpMethod("GET");
+restRegMessage.setRequestHeader("Content-Type", "application/json");
+restRegMessage.setLogLevel("all");
+restRegMessage.setRequestHeader("Authorization", "Bearer " + responseJson.data.token);
+var gr = new GlideRecord('sn_vul_container_image');
+gr.addEncodedQuery('source=9c973a3c87ecd55003270fad0ebb3595^registry=NULL^image_idISNOTEMPTY');
+gr.query();
+while (gr.next()) {
+    var registryUrl = ese_Url + '/api/v2/images/details/' + gr.image_id;
+    gs.debug('registryUrl=' + registryUrl);
+    var finalRegUrl = registryUrl.indexOf('http') == 0 ? registryUrl : gs.getProperty("x_aqss_vr_intgrtn.https.scheme") + registryUrl;
+    gs.debug('finalRegUrl=' + finalRegUrl);
+    restRegMessage.setEndpoint(finalRegUrl);
+    var response12 = restRegMessage.execute();
+    var statusCode1 = response12.getStatusCode();
+    gs.info('statusCode=' + statusCode1);
+    gs.info('response=' + response12.getBody());
+    gr.regisrty = ''; //get registry details from resposne schema
+    gr.update();
+}]]></script>
+        <sys_class_name>sys_script_fix</sys_class_name>
+        <sys_created_by>manish.admin</sys_created_by>
+        <sys_created_on>2023-12-11 09:27:07</sys_created_on>
+        <sys_id>c9e4152d2f87f510433ad6c6f699b65c</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Aqua_registry_fix</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_fix_c9e4152d2f87f510433ad6c6f699b65c</sys_update_name>
+        <sys_updated_by>manish.admin</sys_updated_by>
+        <sys_updated_on>2023-12-11 12:56:30</sys_updated_on>
+        <unloadable>false</unloadable>
+    </sys_script_fix>
+</record_update>

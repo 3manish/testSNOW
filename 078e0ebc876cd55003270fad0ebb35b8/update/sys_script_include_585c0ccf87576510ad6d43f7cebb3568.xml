@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecAutoClose</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecAutoClose</name>
+        <script><![CDATA[var AquaSecAutoClose = Class.create();
+AquaSecAutoClose.prototype = {
+    TOKEN_REFRESH_INTERVAL : 1000*60*30,
+    initialize: function() {
+        this.configSI = new x_aqss_vr_intgrtn.AquaSecConfig();
+
+        this.config = this.configSI.getDefaultInstanceConfig();
+
+        this.loggedInAt = new Date().getTime();
+    },
+
+    execute: function() {
+        gs.debug("Aqua Security autoclose start");
+        if (!this.config.username || !this.config.password || !this.config.url) {
+            gs.debug("Aqua Security is not configured - exiting auto-close job");
+            return;
+        }
+
+        if (this.configSI.getAutocloseSupported()) {
+            gs.debug("Regular autoclose is enabled - exiting");
+            return;
+        }
+        
+        var config = this._getAutoCloseConfig();
+        if (!config) {
+            gs.debug("Regular autoclose is not configured - exiting");
+            return;
+        }
+
+        var days = config.getValue("last_found_days");
+        try {
+            this.api = new x_aqss_vr_intgrtn.AquaSecAPI(this.config.url);
+            this.api.login(this.config.username, this.config.password);
+            gs.debug("Logged in successfully");
+            this._autoCloseByLastScanned(days);
+        } catch (e) {
+            gs.error("Error while running autoclose job:" + e);
+        }
+        gs.debug("Aqua Security autoclose finished");
+    },
+
+    _autoCloseByLastScanned: function(days) {
+        var lastScannedBefore = new GlideDateTime();
+        lastScannedBefore.addDaysUTC(-days);
+
+        //source
+        var instanceId = this.configSI.getDefaultInstanceId();
+
+        var container = new sn_vul.PagedGlideRecord("sn_vul_container_image");
+        container.addQuery("source", instanceId);
+        container.addQuery("last_scan_date", "<", lastScannedBefore);
+        container.setSortField("number");
+
+        while (container.next()) {
+            var containerGr = container.gr;
+            var digest = containerGr.getValue("image_id");
+
+            //TODO use registry
+            if (!this._imageExists("", digest)) {
+                var relatedCVIT = new sn_vul.PagedGlideRecord("sn_vul_container_image_vulnerable_item");
+                relatedCVIT.addQuery("discovered_container_image", containerGr.getValue("sys_id"));
+                relatedCVIT.addQuery("state", "!=", sn_vul.StateUtils.STATES.CLOSED);
+                relatedCVIT.setSortField("sys_id");
+    
+                while (relatedCVIT.next()) {
+                    relatedCVIT.gr.setValue("state", sn_vul.StateUtils.STATES.CLOSED);
+                    relatedCVIT.gr.setValue("substate", sn_vul.StateUtils.SUB_STATES.STALE);
+    //                relatedCVIT.gr.close_notes = gs.getMessage("This vulnerable item has been transitioned to 'Closed' - 'Stale', because the associated asset has not been scanned in the last {0} days.", days.toString());
+                    relatedCVIT.gr.update();
+                }
+            }
+
+        }
+    },
+    _imageExists: function(registry, digest) {
+        this._ensureLoggedIn();
+
+        var r = this.api.getVulnerabilities(registry, digest, 1, 0);
+        return !!r.items.length;
+    },
+
+    _ensureLoggedIn: function() {
+        var now = new Date().getTime();
+
+        if (now - this.loggedInAt > this.TOKEN_REFRESH_INTERVAL) {
+            this.api.login(this.config.username, this.config.password);
+            this.loggedInAt = now;
+        }
+    },
+
+    _getAutoCloseConfig: function() {
+        var configGr = new GlideRecord("sn_vul_container_image_auto_close_config");
+
+        configGr.addActiveQuery();
+        configGr.query();
+
+        if (configGr.next()) {
+            return configGr;
+        } 
+    },
+
+  
+    type: 'AquaSecAutoClose'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-06-12 10:05:20</sys_created_on>
+        <sys_id>585c0ccf87576510ad6d43f7cebb3568</sys_id>
+        <sys_mod_count>51</sys_mod_count>
+        <sys_name>AquaSecAutoClose</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_585c0ccf87576510ad6d43f7cebb3568</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-07-06 10:07:04</sys_updated_on>
+    </sys_script_include>
+</record_update>

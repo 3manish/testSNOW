@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_package_dependency_m2m">
+    <sys_package_dependency_m2m action="INSERT_OR_UPDATE">
+        <dependency display_value="System Import Sets" source="com.glide.system_import_set">180b4385db301010acc285184b96193a</dependency>
+        <min_version>1.0.0</min_version>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-07-08 10:00:59</sys_created_on>
+        <sys_id>0e6d4b36870dd110ad6d43f7cebb356a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2022-07-08 10:00:59</sys_updated_on>
+    </sys_package_dependency_m2m>
+</record_update>

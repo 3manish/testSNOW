@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
+    <sys_app_module action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <application display_value="Aqua Security">4d836a74875e9910ad6d43f7cebb3578</application>
+        <assessment/>
+        <device_type/>
+        <filter/>
+        <hint/>
+        <homepage/>
+        <image/>
+        <link_type>LIST</link_type>
+        <map_page/>
+        <mobile_title>Aqua Security Scopes</mobile_title>
+        <mobile_view_name>Mobile</mobile_view_name>
+        <name>x_aqss_vr_intgrtn_aqua_security_scopes</name>
+        <order/>
+        <override_menu_roles>false</override_menu_roles>
+        <query/>
+        <report/>
+        <roles>sn_vul.vulnerability_read</roles>
+        <sys_class_name>sys_app_module</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-30 08:05:20</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>85836a74875e9910ad6d43f7cebb357c</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Aqua Security Scopes</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_app_module_85836a74875e9910ad6d43f7cebb357c</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-01-11 08:29:55</sys_updated_on>
+        <timeline_page/>
+        <title>Aqua Security Scopes</title>
+        <uncancelable>false</uncancelable>
+        <view_name/>
+        <window_name/>
+    </sys_app_module>
+</record_update>

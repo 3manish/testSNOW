@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_kmf_crypto_caller_policy">
+    <sys_kmf_crypto_caller_policy action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <approval_type/>
+        <check_script_hash>false</check_script_hash>
+        <crypto_module display_value="com_snc_core_automation_glideencrypter">bddc8db07722201099808d11681061bc</crypto_module>
+        <crypto_spec display_value="com_snc_core_automation_glideencrypter --- Symmetric Key Wrapping/Unwrapping">71dc8db07722201099808d11681061be</crypto_spec>
+        <granular_operation/>
+        <identity_group_alias/>
+        <impersonation>false</impersonation>
+        <instance_recipient/>
+        <owner>80801e94db9a97004f035d00cf9619fe</owner>
+        <policy_name>AutoGen-scope-x_aqss_vr_intgrtn-global.com_snc_core_automation_glideencrypter</policy_name>
+        <result>track</result>
+        <script_hash/>
+        <script_table/>
+        <signature_data/>
+        <specify_purpose>false</specify_purpose>
+        <sys_class_name>sys_kmf_crypto_caller_policy</sys_class_name>
+        <sys_created_by>manish.admin</sys_created_by>
+        <sys_created_on>2024-01-16 05:36:14</sys_created_on>
+        <sys_id>a869b54d2ff7b150433ad6c6f699b61a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_kmf_crypto_caller_policy_a869b54d2ff7b150433ad6c6f699b61a</sys_update_name>
+        <sys_updated_by>manish.admin</sys_updated_by>
+        <sys_updated_on>2024-01-16 05:36:14</sys_updated_on>
+        <target_role/>
+        <target_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</target_scope>
+        <target_script/>
+        <type>3</type>
+        <used>false</used>
+    </sys_kmf_crypto_caller_policy>
+</record_update>

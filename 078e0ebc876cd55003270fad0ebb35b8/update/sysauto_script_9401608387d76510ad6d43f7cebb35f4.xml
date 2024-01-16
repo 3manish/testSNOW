@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <business_calendar/>
+        <condition/>
+        <conditional>false</conditional>
+        <entered_time>1970-01-01 00:00:00</entered_time>
+        <name>Aqua Security scheduled script for auto-closing VI</name>
+        <offset/>
+        <offset_type>0</offset_type>
+        <run_as/>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2023-06-12 11:35:24</run_start>
+        <run_time>1970-01-01 08:00:00</run_time>
+        <run_type>daily</run_type>
+        <script><![CDATA[(function(){ 
+    // Add any logic here to construct your report processor script as necessary.
+    return new x_aqss_vr_intgrtn.AquaSecAutoClose().execute();
+})();]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-06-12 11:36:08</sys_created_on>
+        <sys_id>9401608387d76510ad6d43f7cebb35f4</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>Aqua Security scheduled script for auto-closing VI</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sysauto_script_9401608387d76510ad6d43f7cebb35f4</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-07-06 08:09:03</sys_updated_on>
+        <time_zone/>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

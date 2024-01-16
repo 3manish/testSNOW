@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecImageVulsProvider</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecImageVulsProvider</name>
+        <script><![CDATA[var AquaSecImageVulsProvider = Class.create();
+AquaSecImageVulsProvider.prototype = {
+    state: {
+        //default values
+        imagePageIdx: 0, //current item on page
+        imagePageNum: 1 //current page
+    },
+
+    initialize: function(api, username, password, updatedIn, pageSize, state, started) {
+        this.api = api;
+        this.pageSize = pageSize;
+        this.hasMore = false;
+        this.updatedIn = updatedIn;
+
+        if (state != null) {
+            this.state.imagePageIdx = state.imagePageIdx;
+            this.state.imagePageNum = state.imagePageNum;
+
+            this.state.apiToken = state.apiToken;
+
+            //TODO url and expiration can be fetched from JWT token
+            this.state.apiUrl = state.apiUrl;
+            this.state.loggedInAt = state.loggedInAt;
+
+            this.state.started = state.started;
+        } else {
+            this.state.started = started + "";
+        }
+
+        var now = new Date().getTime();
+
+        var TOKEN_REFRESH_INTERVAL = 1000*60*30; //30 min
+
+        //TODO move login to separate method
+        if (this.state.apiToken && (now - state.loggedInAt < TOKEN_REFRESH_INTERVAL)) {
+            this.api.token = this.state.apiToken;
+            this.api.apiUrl = this.state.apiUrl;
+        } else {
+            this.api.login(username, password);
+
+            this.state.loggedInAt = new Date().getTime();
+
+            this.state.apiToken = this.api.token;
+            this.state.apiUrl = this.api.apiUrl;
+        }
+
+        if (!this.state.registry) {
+            this._ensureStateRegistries();
+        }
+    },
+
+    getPage: function() {
+        var pageHasLoaded = false;
+        var earlyExit = false;
+        var result = [];
+        var vulnsAdded = 0;
+
+        do {
+            var response = this.api.getImages(undefined, undefined, this.updatedIn, undefined, this.state.imagePageNum, this.pageSize);
+            var i;
+    
+            this.hasMore = response.hasMore; //more than 1 page of images
+
+            for (i = this.state.imagePageIdx; i < response.items.length; i++) {
+                var imageObj = response.items[i];
+
+                var vulns = [];
+                if (imageObj.digest) {
+                    vulns = this._getVulsByImage(imageObj.registry, imageObj.digest);
+
+                    if (vulns.length) { //skip image if no vulns found
+                        imageObj.vulnerabilities = vulns;
+
+                        imageObj.registryObj = this.state.registries[imageObj.registry];
+                    
+                        result.push(imageObj);
+                    }
+                }
+
+                if (vulnsAdded + vulns.length >= this.pageSize) { //early loop exit
+                    if (i < response.items.length - 1) {
+                        this.hasMore = true;
+                    }
+
+                    pageHasLoaded = true;
+                    earlyExit = true;
+                    break;
+                } else {
+                    vulnsAdded +=vulns.length;
+                }
+            }
+            
+            this.state.imagePageIdx = i + 1;
+
+            if (!earlyExit) { //we iterated through all loaded images
+                if (response.hasMore) { //process next page of images
+                    this.state.imagePageNum++;
+                    this.state.imagePageIdx = 0;
+                } else {
+                    pageHasLoaded = true; //should stop processing
+                }
+            }
+
+        } while(!pageHasLoaded);
+
+        return {
+            attachments : [{
+                filename: "vulns.json",
+                payload: result
+            }],
+            nextRunProperties: this.state,
+            hasMoreData: this.hasMore,
+            type: "vulns"
+        };
+    },
+    _getVulsByImage: function(registry, digest) {
+        var vulPage = 1;
+        var response;
+        var result = [];
+        do {
+            response = this.api.getVulnerabilities(registry, digest, vulPage, this.pageSize);
+            result = result.concat(response.items);
+            vulPage++;
+        } while (response.hasMore)
+        return result;
+    },
+    
+    _ensureStateRegistries: function () {
+        var registries = this.api.getRegistries();
+        var registryMap = {};
+        registries.forEach(function(item) {
+            registryMap[item.name] = item;
+        });
+        this.state.registries = registryMap;
+    }, 
+
+    type: 'AquaSecImageVulsProvider'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-12 12:15:19</sys_created_on>
+        <sys_id>8bdfe2c387b591909eb885dd0ebb352f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>AquaSecImageVulsProvider</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_8bdfe2c387b591909eb885dd0ebb352f</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2022-12-15 06:58:10</sys_updated_on>
+    </sys_script_include>
+</record_update>

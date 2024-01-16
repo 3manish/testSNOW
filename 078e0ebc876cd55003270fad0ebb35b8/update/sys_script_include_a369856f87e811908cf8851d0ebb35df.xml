@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecIntegration</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Module provides top level handling of integration process. </description>
+        <name>AquaSecIntegration</name>
+        <script><![CDATA[var AquaSecIntegration = Class.create();
+AquaSecIntegration.prototype =
+    Object.extendsObject(sn_vul.VulnerabilityIntegrationBase, {
+
+        providers : [
+            x_aqss_vr_intgrtn.AquaSecImageVulsProvider,
+            x_aqss_vr_intgrtn.AquaSecAppScopeProvider
+        ],
+        initialize: function() {
+            var configSI = new x_aqss_vr_intgrtn.AquaSecConfig();
+            this.config = configSI.getDefaultInstanceConfig();
+        },
+        retrieveData: function() {
+            var started = new GlideDateTime(); //first run
+            var pageProviderIdx = 0;
+
+            var runParameters = undefined;
+
+            if (this.integrationProcessGr.parameters != "") {
+                runParameters = JSON.parse(this.integrationProcessGr.parameters);
+                started = new GlideDateTime(runParameters.started); //get started from parameters
+                pageProviderIdx = runParameters.pageProviderIdx;
+            }
+
+            var hours = this._getHoursSinceLastRun(started);
+
+            this.hasMoreData(false);
+
+            var api = new x_aqss_vr_intgrtn.AquaSecAPI(this.config.url);
+
+            var attachmentUtils = new x_aqss_vr_intgrtn.AttachmentUtils();
+
+            var provider = new this.providers[pageProviderIdx] (api, this.config.username, this.config.password, 
+                hours, 100, runParameters, started);
+
+            var page = provider.getPage();
+
+            if (page.hasMoreData) {
+                var nextRunProperties = page.nextRunProperties;
+                nextRunProperties.pageProviderIdx = pageProviderIdx;
+                this.setNextRunParameters(nextRunProperties);
+                this.hasMoreData(true);
+            } else {
+                if (pageProviderIdx < this.providers.length - 1) {
+                    var nextRunProperties = {
+                        started : started + "",
+                        pageProviderIdx : pageProviderIdx + 1
+                    };
+                    this.setNextRunParameters(nextRunProperties);
+                    this.hasMoreData(true);
+                } else {
+                    //we are done with all providers
+                    this._updateDownloadSince(started);
+                }
+            }
+
+            var attachmentIds = [];
+
+            for (var i=0; i<page.attachments.length; i++) {
+                var attachment = page.attachments[i];
+                var attachmentId = attachmentUtils.createProcessAttachment(attachment.filename, this.integrationProcessGr.sys_id, JSON.stringify(attachment.payload));
+                attachmentIds.push(attachmentId);
+            }
+
+			//it goes directly to report processor
+            return {
+                attachments: attachmentIds,
+                contentType: page.type,
+                useAquaRemediation: this.config.useAquaRemediation,
+                started: started + ""
+            };
+        },
+        
+        _updateDownloadSince: function(started) {
+            var integrationSysId = this.integrationProcessGr.integration_run.integration;
+            var integrationGr = new GlideRecord("x_aqss_vr_intgrtn_x_aqss_vr_integration");
+
+            if (integrationGr.get(integrationSysId) && integrationGr.sys_id) {
+                integrationGr.setValue("download_record_since", started);
+                integrationGr.update();
+            }
+
+        },
+        _getHoursSinceLastRun: function(now) {
+            var integrationSysId = this.integrationProcessGr.integration_run.integration;
+            var integrationGr = new GlideRecordSecure("x_aqss_vr_intgrtn_x_aqss_vr_integration");
+
+            if (integrationGr.get(integrationSysId)) {
+                var downloadRecordSince  = integrationGr.getValue("download_record_since");
+
+                if (!downloadRecordSince) {
+                    return 30*24;  //default is 30 days to not overload SN with history records
+                }
+    
+                var started = new GlideDateTime(downloadRecordSince);
+    
+                var duration =  GlideDateTime.subtract(started, now);
+    
+                return Math.ceil(duration.getNumericValue()/3600000) + 1;
+            }
+
+            return undefined;
+        },
+
+        type: 'AquaSecIntegration'
+    });]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-07-13 14:47:02</sys_created_on>
+        <sys_id>a369856f87e811908cf8851d0ebb35df</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>AquaSecIntegration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_a369856f87e811908cf8851d0ebb35df</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-06-15 07:10:16</sys_updated_on>
+    </sys_script_include>
+</record_update>

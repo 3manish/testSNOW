@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sn_sec_int_config">
+    <sn_sec_int_config action="INSERT_OR_UPDATE">
+        <default_value/>
+        <display_name>Aqua Security Vulnerability Response Integration - Use Aqua Remediation</display_name>
+        <elem_type>boolean</elem_type>
+        <help_text/>
+        <integration display_value="Aqua Security Vulnerability Response Integration">ab17fef887ecd55003270fad0ebb3552</integration>
+        <label>Use Aqua Remediation</label>
+        <mandatory>true</mandatory>
+        <name>useAquaRemediation</name>
+        <order>100</order>
+        <password_value/>
+        <sys_class_name>sn_sec_int_config</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-06-09 10:59:25</sys_created_on>
+        <sys_id>91db7c0a8717a110ad6d43f7cebb3549</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>useAquaRemediation</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sn_sec_int_config_91db7c0a8717a110ad6d43f7cebb3549</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-06-09 10:59:25</sys_updated_on>
+    </sn_sec_int_config>
+</record_update>

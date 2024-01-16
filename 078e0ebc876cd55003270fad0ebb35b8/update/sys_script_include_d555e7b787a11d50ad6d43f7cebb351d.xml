@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.MockAquaSecAPI</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>MockAquaSecAPI</name>
+        <script><![CDATA[var MockAquaSecAPI = Class.create();
+MockAquaSecAPI.prototype = {
+    initialize: function(maxImages, maxVulns) {
+        this.maxImages = maxImages;
+        this.maxVulns = maxVulns;
+    },
+	login: function(username, password) {
+	},
+
+    getImages: function(registry, repository, updatedIn, appScope, page, pagesize) {
+        var images = null;
+        var limit =  this.maxImages >= page*pagesize ? pagesize : this.maxImages - (page-1)*pagesize;
+        for (var i=1; i<=limit; i++){
+            if (i == 1) {
+                images = [];
+            }
+            images.push({digest: "sha256:image_"+ page + "_" + i+"("+repository+")"});
+        }
+
+        return {
+            hasMore: this.maxImages > (page)*pagesize,
+            items: images
+        };
+    },
+
+    getRegistries: function() {
+        var registries = [];
+        for (var i=1; i<=5; i++){
+            registries.push({name: "registry_"+ i});
+        }
+
+        return registries;
+    },
+
+
+    getVulnerabilities: function(registry, digest, page, pagesize) {
+        var vulns = [];
+        var limit =  this.maxVulns >= page*pagesize ? pagesize : this.maxVulns - (page-1)*pagesize;
+        for (var i=1; i<=limit; i++){
+            vulns.push({
+                vulnerability: "vuln_" + page + "_" + i,
+                dockerImage: digest + " (" + registry +")",
+            });
+        }
+
+        return {
+            hasMore: this.maxVulns > (page)*pagesize,
+            items: vulns
+        };
+
+
+    },
+
+
+    type: 'MockAquaSecAPI'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-02 13:48:06</sys_created_on>
+        <sys_id>d555e7b787a11d50ad6d43f7cebb351d</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>MockAquaSecAPI</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_d555e7b787a11d50ad6d43f7cebb351d</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2022-09-29 13:50:01</sys_updated_on>
+    </sys_script_include>
+</record_update>

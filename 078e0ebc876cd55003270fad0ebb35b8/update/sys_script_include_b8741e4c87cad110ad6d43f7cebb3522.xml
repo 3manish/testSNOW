@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecConfig</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecConfig</name>
+        <script><![CDATA[var AquaSecConfig = Class.create();
+AquaSecConfig.prototype = {
+    initialize: function() {
+    },
+    getDefaultInstanceId : function() {
+        var integrationId = gs.getProperty("x_aqss_vr_intgrtn.integration.id");
+        
+        var implementationGr = new GlideRecordSecure("sn_sec_int_impl");
+        implementationGr.addQuery("integration", integrationId);
+        implementationGr.setLimit(1);
+        implementationGr.query();
+
+        if(implementationGr.next()) {
+            return implementationGr.sys_id;
+        } else {
+            return undefined;
+        }
+
+    },
+    getDefaultInstanceConfig: function() {
+        var instanceId = this.getDefaultInstanceId();
+        if (instanceId) {
+            return new sn_sec_int.Implementation().getConfiguration(instanceId, false, false);
+        } else {
+            return {};
+        }
+    },
+    setDefaultInstanceConfig: function(configs){
+        var instanceId = this.getDefaultInstanceId();
+
+        if(instanceId) {
+            new sn_sec_int.Implementation().setConfiguration(instanceId, configs);
+        }
+    },
+    getAutocloseSupported: function() {
+        var integrationId = gs.getProperty("x_aqss_vr_intgrtn.integration.id");
+        var integrationGr = new GlideRecord("sn_sec_int_integration");
+        if (integrationGr.get(integrationId)) {
+            return integrationGr.is_auto_close_supported;
+        }
+        return false;
+    },
+    setAutocloseSupported: function(value) {
+        var integrationId = gs.getProperty("x_aqss_vr_intgrtn.integration.id");
+        var integrationGr = new GlideRecord("sn_sec_int_integration");
+
+        if (integrationGr.get(integrationId)) {
+            integrationGr.setValue("is_auto_close_supported", value);
+            integrationGr.update();
+        }
+    },
+    type: 'AquaSecConfig'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-15 12:48:38</sys_created_on>
+        <sys_id>b8741e4c87cad110ad6d43f7cebb3522</sys_id>
+        <sys_mod_count>17</sys_mod_count>
+        <sys_name>AquaSecConfig</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_b8741e4c87cad110ad6d43f7cebb3522</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-06-16 10:01:12</sys_updated_on>
+    </sys_script_include>
+</record_update>

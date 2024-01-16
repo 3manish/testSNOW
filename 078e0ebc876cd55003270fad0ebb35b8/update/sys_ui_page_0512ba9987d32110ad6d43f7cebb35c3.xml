@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[function redirect(){
+    
+    var url = '/navpage.do';
+    top.location.href = url;
+    
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_aqss_vr_intgrtn_Configuration.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+    <style>
+        .form-body {
+            padding: 0 15px;
+            margin: 23px 0 0 -5px;
+        }
+
+        .form-horizontal .control-label .required-marker.mandatory {
+            display: inline;
+            visibility: visible;
+        }
+        .form-horizontal .form-group table tr.annotation-row {
+            display: table-row;
+        }
+        .form-group table {
+            width: 100%
+        }
+
+        .form_action_button_container {
+            margin-top: 25px;
+        }
+
+        .aqua-logo {
+            margin: 25px 0 25px 0;
+        }
+
+        .aqua-logo img {
+            max-height: 80px;
+        }
+        .form-group .form-field .error {
+            border-color: #c83c36;
+        }
+        .form-group .form-field .error:focus {
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #de8986;
+        }
+        .annotation-wrapper {
+            padding : 10px;
+        }
+    </style>
+    <g:evaluate jelly="true" object="true">
+        function toBool(s) {
+            return s.toLowerCase() == "true";
+        }
+
+		
+		  var mid = new GlideRecord('ecc_agent');
+            mid.addQuery('status', 'up');
+		    mid.addQuery('validated', 'false');
+            mid.query();
+			mid;		
+			
+
+        function getModelFromParams(uri, config) {
+            return {
+                username : uri.get("username"),
+                url : uri.get("url"),
+                useAquaRemediation : toBool(uri.get("use-aqua-remediation")),
+                isAutocloseSupported : !toBool(uri.get("use-aqua-autoclose")),
+                password : uri.get("password") ? uri.get("password") : config.password,
+                includePwd : !!uri.get("password")
+            };
+        }
+    	function isValid (uri, config) {
+            if (uri.get("password") == "" &amp;&amp; !config.password){
+                errorClasses["password"]="error";
+                return false;
+            }
+            if (uri.get("url") == "") {
+                errorClasses["url"]="error";
+                return false;
+            }
+            if (uri.get("username") == "") {
+                errorClasses["username"]="error";
+                return false;
+            }
+            return true;
+        }
+    
+        var errorClasses = {};
+        var model = {};
+       
+        var aquaSecConfigSI = new AquaSecConfig();
+
+        var config = aquaSecConfigSI.getDefaultInstanceConfig();
+
+        config.isAutocloseSupported = aquaSecConfigSI.getAutocloseSupported();
+
+        config.includePwd = false;
+
+        var uri = gs.action.getGlideURI();
+        var action = uri.get('action');
+
+        var validationMode = action == "Validate"
+        var submitMode = action == "Submit"
+
+        var uri = gs.action.getGlideURI();
+        var action = uri.get('action');
+
+        var validationMode = action == "Validate"
+        var submitMode = action == "Submit"
+
+        if (submitMode &amp;&amp; !isValid(uri, config)) {
+            model = getModelFromParams(uri, config);
+        } else if (validationMode) {
+            model = getModelFromParams(uri, config);
+
+            var notificationClassname = "notification-info";
+            var msg = "Connection was successful";
+			try {
+				var apiSI = new AquaSecAPI(model.url);
+				apiSI.login(model.username, model.password);
+			} catch (ex) {
+				msg = ex + "";
+                var notificationClassname = "notification-error";
+			}
+        } else {
+            model = config;
+        }
+        
+    </g:evaluate>
+	
+    <div class="col-xs-12">
+        <h2>Aqua Security Integration Configuration</h2>
+    </div>
+
+    <g:ui_form>
+        <div class="form-body form-horizontal">
+            <div class="section-content">
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <j:if test="${validationMode}">
+                            <div class="outputmsg_div">
+                                <div class="outputmsg outputmsg_info notification ${notificationClassname}">
+                                    ${HTML,JS: msg}
+                                    <button type="button" aria-label="Close Messages" id="close-messages-btn" class="btn btn-icon close icon-cross" onclick="GlideUI.get().onCloseMessagesButtonClick(this); return false;"/>
+                                </div>
+                            </div>
+                        </j:if>
+                        <div class="aqua-logo">
+                            <img alt="Aqua Security Vulnerability Response Integration Item logo"
+                                class="bannertext center-block" src="3326d84c87ab2910ad6d43f7cebb35db.iix" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="form-group ">
+                        <div class="is-required">
+                            <label class="col-xs-12 col-md-2 control-label required-marker" for="url">
+                                URL
+                            </label>
+                        </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <input id="url" name="url" value="${HTML,JS:model.url}" class="form-control ${errorClasses['url']}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="is-required">
+                            <label class="col-xs-12 col-md-2 control-label required-marker" for="username">
+                                Username
+                            </label>
+                         </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <input id="username" name="username" value="${HTML,JS:model.username}"
+                                class="form-control ${errorClasses['username']}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="is-required">
+                            <label class="col-xs-12 col-md-2 control-label required-marker" for="password">
+                                Password
+                            </label>
+                        </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <j:choose>
+                                <j:when test="${model.includePwd}">
+                                    <input id="password" name="password" class="form-control ${errorClasses['password']}" value="${HTML,JS:model.password}" type="password" />
+                                </j:when>
+                                <j:otherwise>
+                                    <input id="password" name="password" class="form-control ${errorClasses['password']}" placeholder="******" type="password" />
+                                </j:otherwise>
+                            </j:choose>
+                        </div>
+                    </div>
+<!-- 		Manish			 -->
+									
+					   <div class="form-group ">
+                        <div class="is-required">
+                            <label class="col-xs-12 col-md-2 control-label required-marker" for="midserver">
+                                Use MidServer
+                            </label>
+                        </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <span class="input-group-checkbox" style="margin-top: 10px">
+                                <g:ui_checkbox id="use-midserverId" name="use-midserverName"
+                                    value="${HTML,JS:model.useMidServer}" />
+                            </span>
+                        </div>
+                    </div>
+	
+<!-- 		Manish			 -->
+					<div class="form-group ">
+                        <div class="is-required" data-type="label" type="choice" id="mid.id">
+                            <label class="col-xs-12 col-md-2 control-label required-marker" for="midserver">
+                                Mid Server
+                            </label>
+                         </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+							<select aria-required="false"  ng-non-bindable="true" name="mid.name" id="mid.id" style="; " class="form-control"  onchange="redirect()">
+								<j:while test="${mid.next()}">
+									<option value="${mid.name}">${mid.name}</option>
+								</j:while>
+							</select>
+                        </div>
+                    </div>
+<!-- 		Manish			 -->
+
+<!-- Manish -->
+                    <div class="form-group ">
+                        <div>
+                            <label class="col-xs-12 col-md-2 control-label"
+                                for="use-aqua-remediation">
+                                Use Aqua Remediation
+                            </label>
+                        </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <span class="input-group-checkbox" style="margin-top: 10px">
+                                <g:ui_checkbox id="use-aqua-remediation" name="use-aqua-remediation"
+                                    value="${HTML,JS:model.useAquaRemediation}" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div>
+                            <label class="col-xs-12 col-md-2 control-label"
+                                for="use-aqua-autoclose">
+                                Use Aqua Auto Close
+                            </label>
+                        </div>
+                        <div class="col-xs-12 col-md-9 form-field">
+                            <span class="input-group-checkbox" style="margin-top: 10px">
+                                <g:ui_checkbox id="use-aqua-autoclose" name="use-aqua-autoclose"
+                                    value="${HTML,JS:!model.isAutocloseSupported}" />
+                            </span>
+                        </div>
+                    </div>
+					
+					
+                </div>
+                <div class="row">
+                    <div class="row col-xs-12 form_action_button_container">
+                        <div style="float:left">
+                            <input class="btn-default btn" type="submit" name="action" value="Validate" />
+                        </div>
+                        <div style="float:right">
+                            <input class="btn-primary btn" type="submit" name="action" value="Submit" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </g:ui_form>
+</j:jelly>]]></html>
+        <name>Configuration</name>
+        <processing_script><![CDATA[var url = request.getParameter("url");
+var username = request.getParameter("username");
+var password = request.getParameter("password");
+var useAquaRemediation = request.getParameter("use-aqua-remediation");
+var useAquaAutoCloseParam = request.getParameter("use-aqua-autoclose");
+var pageId = request.getParameter("sys_id");
+var action = request.getParameter("action");
+
+var aquaSecConfigSI = new AquaSecConfig();
+
+if (action == "Submit" && username!="" && url!="") {
+    var config = {
+        username : username,
+        url : url,
+        useAquaRemediation: useAquaRemediation.toLowerCase() == "true"
+    };
+
+    if (password) {
+        config.password = password;
+    } 
+
+    aquaSecConfigSI.setDefaultInstanceConfig(config);
+    var useAquaAutoClose = useAquaAutoCloseParam.toLowerCase() == "true";
+
+    aquaSecConfigSI.setAutocloseSupported(!useAquaAutoClose);
+}
+
+]]></processing_script>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-06-07 11:40:24</sys_created_on>
+        <sys_id>0512ba9987d32110ad6d43f7cebb35c3</sys_id>
+        <sys_mod_count>223</sys_mod_count>
+        <sys_name>Configuration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_ui_page_0512ba9987d32110ad6d43f7cebb35c3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-02 13:16:19</sys_updated_on>
+    </sys_ui_page>
+</record_update>

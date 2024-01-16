@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecContainerCountIntegration</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecContainerCountIntegration</name>
+        <script><![CDATA[var AquaSecContainerCountIntegration = Class.create();
+AquaSecContainerCountIntegration.prototype = Object.extendsObject(sn_vul.VulnerabilityIntegrationBase, {
+    pageSize: 100,
+    containerCount: {},
+    initialize: function() {
+        gs.info('count 1.0 inside initialize');
+        /*
+		var configSI = new x_aqss_vr_intgrtn.AquaSecConfig();
+        this.config = configSI.getConfig();
+       */
+        var configSI = new x_aqss_vr_intgrtn.AquaSecConfig();
+        this.config = configSI.getDefaultInstanceConfig();
+        gs.info('count 1.1 inside initialize='+this.config);
+
+    },
+    retrieveData: function() {
+        gs.info('count 2 inside retrieveData');
+        this.source = this.integrationProcessGr.integration_run.implementation;
+
+        var api = new x_aqss_vr_intgrtn.AquaSecAPI(this.config.url);
+
+        api.login(this.config.username, this.config.password);
+
+        var page = 1;
+
+        var response;
+
+        do {
+            gs.info('count 3 inside retrieveData do loop pg23');
+            response = api.getContainers(page, this.pageSize);
+            gs.info('count 4 getContainers response pg25=' + JSON.stringify(response));
+            this._updateContainerCounts(response.items);
+            page++;
+        } while (response.hasMore)
+
+        this._updateDiscoveredImages();
+
+    },
+    _updateContainerCounts: function(batch) {
+        batch.forEach(function(container) {
+            if (!this.containerCount[container.digest]) {
+                gs.info('count 5 inside _updateContainerCounts if loop pg36');
+                this.containerCount[container.digest] = 1;
+            } else {
+                gs.info('count 6 inside _updateContainerCounts else loop pg39');
+                this.containerCount[container.digest] = this.containerCount[container.digest] + 1;
+            }
+        }, this);
+
+    },
+    _updateDiscoveredImages: function() {
+        var containerImageGr = new GlideRecord('sn_vul_container_image');
+        containerImageGr.query();
+
+        while (containerImageGr.next()) {
+            var imageId = containerImageGr.image_id
+            var cnt = this.containerCount[imageId] ? this.containerCount[imageId] : 0;
+
+            containerImageGr.setValue("container_count", cnt);
+
+            containerImageGr.update();
+        }
+    },
+
+    type: 'AquaSecContainerCountIntegration'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-09-15 12:45:18</sys_created_on>
+        <sys_id>e963de0c87cad110ad6d43f7cebb3534</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>AquaSecContainerCountIntegration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_e963de0c87cad110ad6d43f7cebb3534</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-02 07:26:36</sys_updated_on>
+    </sys_script_include>
+</record_update>

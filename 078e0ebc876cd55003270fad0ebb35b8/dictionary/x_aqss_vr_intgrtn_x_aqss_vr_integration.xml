@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="5e79af4587d96510a498a8e83cbb3520" extends="sn_vul_integration" label="Aqua Security Vulnerability Integration" max_length="40" name="x_aqss_vr_intgrtn_x_aqss_vr_integration" type="collection">
+        <element label="Download Record Since" max_length="40" name="download_record_since" type="glide_date_time"/>
+    </element>
+</database>

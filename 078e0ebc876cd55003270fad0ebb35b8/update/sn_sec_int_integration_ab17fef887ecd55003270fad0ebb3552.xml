@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sn_sec_int_integration">
+    <sn_sec_int_integration action="INSERT_OR_UPDATE">
+        <banner_logo>3326d84c87ab2910ad6d43f7cebb35db</banner_logo>
+        <categories/>
+        <configurable>true</configurable>
+        <description>Integration provides import of vulnerabilities found by Aqua Sec scanner to further tracking in  Container Vulnerability Response application</description>
+        <external_link/>
+        <help_link/>
+        <host_attributes_table/>
+        <id>com.snc.vulnerability.container.aquasecurity</id>
+        <include_proof_in_vi_key>false</include_proof_in_vi_key>
+        <instance_setup_script/>
+        <integration_type>CONTAINERVUL</integration_type>
+        <ire_source_name/>
+        <is_auto_close_supported>false</is_auto_close_supported>
+        <is_multi_source_supported>true</is_multi_source_supported>
+        <is_reapply_ci_lookup_supported>false</is_reapply_ci_lookup_supported>
+        <lookup_by_network>false</lookup_by_network>
+        <name>Aqua Security Vulnerability Response Integration</name>
+        <order>100</order>
+        <short_description>Integration provides import of vulnerabilities found by Aqua Sec scanner to further tracking in  Container Vulnerability Response application</short_description>
+        <source>Aqua Security</source>
+        <sys_class_name>sn_sec_int_integration</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-07-05 09:41:27</sys_created_on>
+        <sys_id>ab17fef887ecd55003270fad0ebb3552</sys_id>
+        <sys_mod_count>14</sys_mod_count>
+        <sys_name>Aqua Security Vulnerability Response Integration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sn_sec_int_integration_ab17fef887ecd55003270fad0ebb3552</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-07-06 10:10:02</sys_updated_on>
+        <validation_script/>
+    </sn_sec_int_integration>
+</record_update>

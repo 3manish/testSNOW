@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="Aqua Security" section_id="21e41eb8871e9910ad6d43f7cebb3590" sys_domain="global" table="sn_vul_container_image_vulnerable_item" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>x_aqss_vr_intgrtn_aqua_app_scopes</element>
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-22 11:18:40</sys_created_on>
+            <sys_id>5c583bd397ee7510a1a07d100153afe4</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Aqua Security" display_value="Aqua Security" name="sn_vul_container_image_vulnerable_item" sys_domain="global" view="Default view">21e41eb8871e9910ad6d43f7cebb3590</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-22 11:18:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>discovered_container_image.registry</element>
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-11-22 11:18:40</sys_created_on>
+            <sys_id>d0583bd397ee7510a1a07d100153afe5</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Aqua Security" display_value="Aqua Security" name="sn_vul_container_image_vulnerable_item" sys_domain="global" view="Default view">21e41eb8871e9910ad6d43f7cebb3590</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-11-22 11:18:40</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption>Aqua Security</caption>
+            <header>false</header>
+            <name>sn_vul_container_image_vulnerable_item</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>levchenko.andrey</sys_created_by>
+            <sys_created_on>2022-09-30 07:01:29</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>21e41eb8871e9910ad6d43f7cebb3590</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sn_vul_container_image_vulnerable_item</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+            <sys_update_name>sys_ui_section_21e41eb8871e9910ad6d43f7cebb3590</sys_update_name>
+            <sys_updated_by>levchenko.andrey</sys_updated_by>
+            <sys_updated_on>2022-09-30 07:01:29</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

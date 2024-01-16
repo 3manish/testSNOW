@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>SaaS login URL</description>
+        <ignore_cache>true</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_aqss_vr_intgrtn.saas.login.url</name>
+        <read_roles/>
+        <suffix>saas.login.url</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-04-25 07:08:27</sys_created_on>
+        <sys_id>1207182b87da61509eb885dd0ebb3592</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_aqss_vr_intgrtn.saas.login.url</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_properties_1207182b87da61509eb885dd0ebb3592</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-04-25 07:22:59</sys_updated_on>
+        <type>string</type>
+        <value>https://api.cloudsploit.com</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=1207182b87da61509eb885dd0ebb3592"/>
+</record_update>

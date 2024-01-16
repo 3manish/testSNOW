@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[function redirect(){
+    
+    var url = '/navpage.do';
+    top.location.href = url;
+    
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_aqss_vr_intgrtn_tes_Ui.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+    <html>
+        <style>
+            .color-class
+            {
+            color:red;
+            }
+            .color-blue-class
+            {
+            color:blue;
+            }
+        </style>
+
+        <p class="color-class">hello</p>
+        <p class="color-red-blue">Blue Color</p>
+
+        <g:evaluate jelly="true" object="true">
+
+            var inc = new GlideRecord('incident');
+            inc.setLimit(10);
+            inc.query();
+            inc;
+        </g:evaluate>
+
+        <select name="tables" id="selected1" onchange="redirect()">
+
+            <j:while test="${inc.next()}">
+                <option value="${inc.number}">${inc.number}</option>
+            </j:while>
+        </select>
+
+    </html>
+</j:jelly>]]></html>
+        <name>tes_Ui</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-01-02 12:38:35</sys_created_on>
+        <sys_id>adb39fa02fa371d0433ad6c6f699b6ca</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>tes_Ui</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_ui_page_adb39fa02fa371d0433ad6c6f699b6ca</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-01-02 12:38:35</sys_updated_on>
+    </sys_ui_page>
+</record_update>

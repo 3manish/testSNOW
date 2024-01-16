@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_wizard_answer">
+    <sys_wizard_answer action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <answer>Aqua Security Vulnerability Integration</answer>
+        <button_label/>
+        <dependent_value/>
+        <element/>
+        <name>Aqua Security Vulnerability Integration</name>
+        <next_question/>
+        <order>100</order>
+        <payload_name/>
+        <question display_value="Application File" name="Application File">93879b01db301010acc285184b961936</question>
+        <roles/>
+        <script/>
+        <sys_class_name>sys_wizard_answer</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-08-05 12:57:44</sys_created_on>
+        <sys_id>466d4b36870dd110ad6d43f7cebb3574</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Aqua Security Vulnerability Integration</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_wizard_answer_466d4b36870dd110ad6d43f7cebb3574</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2022-08-05 12:57:44</sys_updated_on>
+        <table/>
+        <target_url>x_aqss_vr_intgrtn_x_aqss_vr_integration.do</target_url>
+        <type>1</type>
+    </sys_wizard_answer>
+</record_update>

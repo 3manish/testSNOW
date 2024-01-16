@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecReportProcessor</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>AquaSecReportProcessor</name>
+        <script><![CDATA[var AquaSecReportProcessor = Class.create();
+
+AquaSecReportProcessor.prototype = Object.extendsObject(sn_vul.VulnerabilityReportProcessorBase, {
+    initialize: function() {},
+    processReport: function(process) {
+        var integrationRun = this.integrationProcessGr.integration_run;
+        var source = this.integrationProcessGr.integration_run.source;
+        var integration = this.integrationProcessGr.integration_run.implementation.integration + "";
+        var implId = this.integrationProcessGr.integration_run.implementation + "";
+
+        if (process.contentType == "vulns") {
+            this._processFindings(process, integrationRun, source, integration, implId);
+        } else if (process.contentType == "scopes") {
+            this._processScopes(process, integrationRun, source, integration, implId);
+        }
+
+    },
+    _processScopes: function(process, integrationRun, source, integration, implId) {
+        var attachmentUtils = new x_aqss_vr_intgrtn.AttachmentUtils();
+        var viUpdatedCnt = 0;
+
+        if (!process.attachments || process.attachments.length == 0) {
+            return;
+        }
+        var attachmentId = process.attachments[0];
+        var stored = attachmentUtils.readAttachment(attachmentId);
+
+        if (stored.scopeImages.length == 0) {
+            return
+        }
+
+        var scopeSysId = this._getOrCreateScope(stored.scope);
+
+        for (var imgIdx in stored.scopeImages) {
+            imgKey = stored.scopeImages[imgIdx];
+            viUpdatedCnt += this._appendScopeToImage(implId, scopeSysId, imgKey);
+        }
+
+        this.integrationProcessGr.setValue("vi_updated", viUpdatedCnt);
+        this.integrationProcessGr.setValue("import_vi", viUpdatedCnt);
+        this.integrationProcessGr.update();
+    },
+
+    _processFindings: function(process, integrationRun, source, integration, implId) {
+        var payloadObj = [];
+
+        if (!process.attachments || process.attachments.length == 0) {
+            return;
+        }
+
+        var attachmentId = process.attachments[0];
+
+        var payload = new GlideRecordSecure('sys_attachment');
+        if (payload.get(attachmentId)) {
+            var sa = new GlideSysAttachment();
+            payloadObj = JSON.parse(sa.getContent(payload));
+        }
+
+        var viUpdatedCnt = 0;
+        var viCreatedCnt = 0;
+
+        var findings = [];
+
+        var findingSI = new sn_vul_container.Finding(integration, implId, integrationRun, this.integrationProcessGr.sys_id);
+        var imagePackageSI = new sn_vul_container.ImagePackage();
+        var importImageSI = new sn_vul_container.ImportImage();
+        var thirdPartyVulnerabilitySI = new sn_vul.ThirdPartyVulnerability(source, implId, integrationRun);
+        var startTime = new GlideDateTime(process.started);
+
+        payloadObj.forEach(function(image) {
+            var imageId = image.registryObj.url ? this._removeSchema(image.registryObj.url) + "/" + image.repository + "@" + image.digest :
+                image.repository + "@" + image.digest;
+
+            var host = {
+                // Image ID of the Docker Image
+                "image_id": imageId,
+                // ID used for lookup in "Discovered Container Images"
+                "id": image.digest ? image.digest : "Unknown",
+                "name": image.repository, // Name of the Docker Image
+                "version": image.tag, // Image Repository version"
+                "image_creation_date": this._parseDate(image.image_build_date), // Docker image creation date
+
+                "last_scan_date": this._parseDate(image.scan_date), // Docker image last scan date
+                "first_scan_date": this._parseDate(image.scan_date), // Docker image first scan date
+
+                "repo_value": image.repository, // Image Repository name -  Required!
+                "os": image.os && image.os_version ? image.os + ":" + image.os_version : undefined,
+                "is_base_image": false, // Is the Docker Image a base image (true/false)
+                "registry": image.registry // Image Registory name
+            };
+
+
+            var created = importImageSI.imageImport(implId, host, "id", integrationRun);
+            if (!created) {
+                gs.info("problem creating image: " + JSON.stringify(host));
+                return;
+            }
+
+            image.vulnerabilities.forEach(function(vuln) {
+                var pkgDetails = {};
+
+                var pkgId = imagePackageSI.insertorUpdatePackage(pkgDetails, vuln.packageName, vuln.packageVersion);
+
+                var finding = {
+                    "cmdb_ci": created.ciId,
+                    "src_ci": created.discItemID,
+                    "image_repository": created.repo,
+
+                    "packages": pkgId,
+
+                    "proof": vuln.summary,
+                    "vulnerabilityId": vuln.vulnerability,
+
+                    "status": 0,
+                    "last_found": vuln.lastFoundDate, // Finding last found date
+                    "first_found": vuln.firstFoundDate, // Finding first found date
+
+                    "integration_run": integrationRun,
+                    "is_base_image": false, // Is the Docker Image a base image (true/false)
+                    "source": source
+                };
+
+                if (vuln.vulnerability.indexOf("CVE") < 0) {
+                    var thirdPartyEntry = thirdPartyVulnerabilitySI.newVulnerability(vuln.vulnerability);
+
+                    thirdPartyEntry.vulObj["summary"] = vuln.summary;
+                    thirdPartyEntry.vulObj["solution"] = vuln.solution;
+                    thirdPartyEntry.vulObj["score"] = vuln.vendor_cvss2_score;
+                    thirdPartyEntry.vulObj["v3_base_score"] = vuln.vendor_cvss3_score;
+                    thirdPartyEntry.vulObj["exploitability"] = vuln.exploitability;
+                    thirdPartyEntry.vulObj["exploit"] = vuln.exploitability != "" ? "Yes" : "No";
+
+
+                    var thirdPartyEntryRet = thirdPartyVulnerabilitySI.createOrUpdateVulnerability(thirdPartyEntry);
+
+                    finding["vulnerability"] = thirdPartyEntryRet.sys_id;
+                }
+
+
+
+                var result = findingSI.createFinding(finding);
+
+                if (findings.indexOf(result.findingSysId) > 0) {
+                    gs.error("duplicate: " + JSON.stringify(finding));
+                }
+                // assume NVD entry is created at this moment
+                if (process.useAquaRemediation && vuln.solution) {
+                    this._setNVDSolution(vuln.vulnerability, vuln.solution);
+                }
+
+                findings.push(result.findingSysId);
+
+                if (!result) {
+                    gs.error("problem creating finding: " + JSON.stringify(finding));
+                } else {
+                    var viCreated = new GlideDateTime(this._getVIcreateDate(result.viSysId[0]));
+
+                    if (viCreated.getNumericValue() <= startTime.getNumericValue()) {
+                        viUpdatedCnt++;
+                    } else {
+                        viCreatedCnt++;
+                    }
+                }
+
+
+            }, this);
+
+        }, this);
+        this.integrationProcessGr.setValue("vi_created", viCreatedCnt);
+        this.integrationProcessGr.setValue("vi_updated", viUpdatedCnt);
+        this.integrationProcessGr.setValue("import_vi", viCreatedCnt + viUpdatedCnt);
+        this.integrationProcessGr.update();
+    },
+    _parseDate: function(originalDate) {
+        if (!originalDate) {
+            return;
+        }
+        /*
+        build date goes in format 2019-08-11T14:38:09.978192919Z.
+        Formats supported in this environment don't work with  milliseconds correctly
+        */
+        var buildDate = originalDate.replace(/\.\d+/g, ''); //remove milliseconds
+
+        var gdt = new GlideDateTime();
+        gdt.setValueUTC(buildDate, "yyyy-MM-dd'T'HH:mm:ssX");
+
+        return gdt.getValue(); //still UTC
+    },
+    _removeSchema: function(originalUrl) {
+        return originalUrl.replace(/^http:\/\/|https:\/\//g, '');
+    },
+    _getVIcreateDate: function(viSysId) {
+        var viGr = new GlideRecordSecure('sn_vul_container_image_vulnerable_item');
+
+        return viGr.get(viSysId) ? viGr.getValue("sys_created_on") : undefined;
+    },
+    _getOrCreateScope: function(scope) {
+        var scopeGr = new GlideRecord("x_aqss_vr_intgrtn_aqua_security_scopes");
+        scopeGr.addQuery("name", scope.name);
+        scopeGr.query();
+
+        if (scopeGr.next()) {
+            scopeGr.setValue("owner_email", scope.ownerEmail); //update owner email
+            scopeGr.update();
+            return scopeGr.sys_id + "";
+        } else {
+            scopeGr.initialize();
+            scopeGr.setValue("name", scope.name);
+            scopeGr.setValue("owner_email", scope.ownerEmail);
+            return scopeGr.update();
+        }
+
+    },
+    _appendScopeToImage: function(source, scopeSysId, imageKey) {
+        var parts = imageKey.split('@');
+        var dciId = this._getDiscoveredContainerImage(source, parts[0], parts[1]);
+
+        return this._updateVulnerableItems(dciId, scopeSysId);
+
+    },
+    _setNVDSolution: function(id, solution) {
+        var nvdGr = new GlideRecord("sn_vul_nvd_entry");
+        nvdGr.addQuery("id", id);
+        nvdGr.query();
+
+        if (nvdGr.next()) {
+            nvdGr.setValue("solution", solution);
+            nvdGr.update();
+        }
+    },
+
+    _getDiscoveredContainerImage: function(source, registry, digest) {
+        var vciGr = new GlideRecordSecure("sn_vul_container_image");
+        vciGr.addQuery("source", source);
+        vciGr.addQuery("image_id", digest);
+        //TODO registry
+        vciGr.query();
+
+        if (vciGr.next()) {
+           // vciGr.registry = registry; //added by Calsoft
+           //vciGr.update();  //added by Calsoft
+            return vciGr.sys_id + "";
+        } else {
+            return undefined;
+        }
+
+    },
+    _updateVulnerableItems: function(discoveredImage, scopeSysId) {
+        var viGr = new GlideRecord("sn_vul_container_image_vulnerable_item");
+        viGr.addQuery("discovered_container_image", discoveredImage);
+        viGr.query();
+        var cnt = 0;
+        while (viGr.next()) {
+            this._updateVulnerableItem(viGr, scopeSysId);
+            cnt++;
+        }
+        return cnt;
+    },
+
+    _updateVulnerableItem: function(viGr, scopeSysId) {
+        var scopesValue = viGr.getValue('x_aqss_vr_intgrtn_aqua_app_scopes');
+
+        var scopes = scopesValue ? scopesValue.split(',') : [];
+
+        if (scopes.indexOf(scopeSysId) < 0) { //not found
+            scopes.push(scopeSysId);
+            viGr.setValue('x_aqss_vr_intgrtn_aqua_app_scopes', scopes.join(','));
+            viGr.update();
+        }
+    },
+
+
+
+    type: 'AquaSecReportProcessor'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-08-17 13:44:47</sys_created_on>
+        <sys_id>4caa45fe87515d109eb885dd0ebb3593</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>AquaSecReportProcessor</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_4caa45fe87515d109eb885dd0ebb3593</sys_update_name>
+        <sys_updated_by>manish.admin</sys_updated_by>
+        <sys_updated_on>2023-12-08 11:13:44</sys_updated_on>
+    </sys_script_include>
+</record_update>

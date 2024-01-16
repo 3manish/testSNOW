@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_alias">
+    <sys_alias action="INSERT_OR_UPDATE">
+        <configuration_template/>
+        <connection_type>http_connection</connection_type>
+        <id>x_aqss_vr_intgrtn.forGitHubSSH</id>
+        <multiple_connections>false</multiple_connections>
+        <name>forGitHubSSH</name>
+        <parent/>
+        <retry_policy display_value="Default HTTP Retry Policy">ef751ff07301330025d71afe2ff6a7f9</retry_policy>
+        <sys_class_name>sys_alias</sys_class_name>
+        <sys_created_by>manish.admin</sys_created_by>
+        <sys_created_on>2024-01-16 09:27:58</sys_created_on>
+        <sys_id>0f3eee052f7fb150433ad6c6f699b64a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_aqss_vr_intgrtn.forGitHubSSH</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_alias_0f3eee052f7fb150433ad6c6f699b64a</sys_update_name>
+        <sys_updated_by>manish.admin</sys_updated_by>
+        <sys_updated_on>2024-01-16 09:27:58</sys_updated_on>
+        <type>credential</type>
+    </sys_alias>
+</record_update>

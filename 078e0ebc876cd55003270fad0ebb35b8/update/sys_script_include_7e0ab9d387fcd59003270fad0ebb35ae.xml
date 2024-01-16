@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_aqss_vr_intgrtn.AquaSecAPI</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Aqua Sec REST API</description>
+        <name>AquaSecAPI</name>
+        <script><![CDATA[var AquaSecAPI = Class.create();
+AquaSecAPI.prototype = {
+    SaaSEnvironments: {
+        "cloud.aquasec.com": {
+            provisionUrlKey : "x_aqss_vr_intgrtn.saas.provision.url",
+            loginUrlKey : "x_aqss_vr_intgrtn.saas.login.url"
+        },
+        "eu-1.cloud.aquasec.com": {
+            provisionUrlKey : "x_aqss_vr_intgrtn.eu1.saas.provision.url",
+            loginUrlKey: "x_aqss_vr_intgrtn.eu1.saas.login.url"
+        },
+        "asia-1.cloud.aquasec.com": {
+            provisionUrlKey : "x_aqss_vr_intgrtn.asia1.saas.provision.url",
+            loginUrlKey: "x_aqss_vr_intgrtn.asia1.saas.login.url"
+        },
+        "asia-2.cloud.aquasec.com": {
+            provisionUrlKey : "x_aqss_vr_intgrtn.asia2.saas.provision.url",
+            loginUrlKey: "x_aqss_vr_intgrtn.asia2.saas.login.url"
+        },
+        "cloud-dev.aquasec.com": {
+            provisionUrlKey : "x_aqss_vr_intgrtn.staging.provision.url",
+            loginUrlKey: "x_aqss_vr_intgrtn.staging.login.url"
+        },
+    },
+    detectedSaaSEnv: undefined,
+    initialize: function(url) {
+        if (!url) {
+            throw "No url specified in integration config";
+        }
+
+        this.detectedSaaSEnv = this._detectSaaSenv(url);
+        if (!this.detectedSaaSEnv){
+			this.apiUrl = url;
+		}
+    },
+    _getHost: function(url) {
+        var expression = /(https?:\/\/)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)*(\/[\/\d\w\.-]*)*(?:[\?])*(.+)*/gi
+        var regex = new RegExp(expression);
+        var groups = regex.exec(url);
+    
+        return groups.length > 2 ? groups[2]: undefined;
+    },
+    
+    _detectSaaSenv: function(url) {
+        var host = this._getHost(url);
+        if (this.SaaSEnvironments[host]) {
+            var detection = this.SaaSEnvironments[host];
+            return {
+                provisionUrl: gs.getProperty(detection.provisionUrlKey),
+                loginUrl: gs.getProperty(detection.loginUrlKey)
+            };
+        } else {
+            baseUrlPosition = host.indexOf("cloud.aquasec.com");
+            if (baseUrlPosition > -1) {
+
+                var region = host.substring(0, baseUrlPosition-1);
+
+                var httpsScheme = gs.getProperty("x_aqss_vr_intgrtn.https.scheme");
+                var provisionUrlPrefix = gs.getProperty("x_aqss_vr_intgrtn.provision.url.prefix");
+                var provisionUrlSuffix = gs.getProperty("x_aqss_vr_intgrtn.provision.url.suffix");
+                var loginUrlSuffix = gs.getProperty("x_aqss_vr_intgrtn.login.url.suffix");
+
+                return {
+                    provisionUrl : provisionUrlPrefix + region + provisionUrlSuffix,
+                    loginUrl: httpsScheme + region + loginUrlSuffix
+                }
+            }
+
+        }
+    },
+    login: function(username, password) {
+        // validation
+        if (!username ) {
+            throw "No username specified in integration config";
+        }
+
+        if (!password ) {
+            throw "No password specified in integration config";
+        }
+        var payload = {};
+        var responseJson;
+
+		if (this.detectedSaaSEnv) {
+            payload = {
+                email: username,
+                password: password
+            };
+            responseJson = this._sendCredentials(payload, this.detectedSaaSEnv.loginUrl + "/v2/signin");
+
+            this.token = responseJson.data.token;
+            
+            //require API url for use with further requests
+            
+            var provisionResponseJson = this._sendGet(this.detectedSaaSEnv.provisionUrl + "/v1/envs");
+            
+            this.apiUrl = gs.getProperty("x_aqss_vr_intgrtn.https.scheme") + provisionResponseJson.data.ese_url;
+        } else {
+            payload = {
+                id: username,
+                password: password
+            };
+
+            responseJson = this._sendCredentials(payload, this.apiUrl + '/api/v1/login');
+
+            this.token = responseJson.token;
+        }
+	},
+    _sendCredentials: function(payload, url) {
+        var restMessage = new sn_ws.RESTMessageV2();
+
+        restMessage.setHttpMethod("POST");
+        restMessage.setRequestHeader("Content-Type", "application/json");
+        restMessage.setEndpoint(url);
+        restMessage.setRequestBody(JSON.stringify(payload));
+
+        var response = restMessage.execute();
+        var statusCode = response.getStatusCode();
+
+        if (statusCode < 200 || statusCode > 299) {
+            throw "Invalid Aqua Security API response code: " + statusCode + " (" + restMessage.getEndpoint() + ")";
+        }
+
+        return this._parseJSON(response);
+    },
+    
+    getRepositories: function(page, pagesize) {
+        var params = {
+            page : page,
+            pagesize: pagesize
+        };
+
+        var responseJson = this._sendGet("/api/v2/repositories", params);
+
+
+        var ret = {
+            hasMore: false,
+            items: []
+        };
+
+        responseJson.result && responseJson.result.forEach(function(item) {
+            ret.items.push({
+                name: item.name,
+                registry: item.registry
+            });
+        });
+        ret.hasMore = responseJson.count > (responseJson.page * responseJson.pagesize);
+
+        return ret;
+    },
+    getImages: function(registry, repository, updatedIn, appScope, page, pagesize) {
+        var params = {
+            only_vulnerable: "true",
+            page : page,
+            pagesize: pagesize
+        };
+
+        if (registry) {
+            params["registry"] = registry;
+        }
+
+        if (repository) {
+            params["repository"] = repository;
+        }
+
+        if (updatedIn) {
+            params["updated_in"] = updatedIn;
+        }
+
+        if (appScope) {
+            params["scope"] = appScope;
+        }
+
+        var responseJson = this._sendGet("/api/v2/images", params)
+
+        var ret = {
+            hasMore: false,
+            items: []
+        };
+
+        ret.items = responseJson.result || [];
+
+        ret.hasMore = responseJson.count > (responseJson.page * responseJson.pagesize);
+
+        return ret;
+    },
+    getRegistries: function() {
+        return this._sendGet("/api/v1/registries");
+    },
+    getApplicationScopes: function(page, pagesize) {
+        var params = {
+            page : page,
+            pagesize: pagesize
+        };
+
+        var responseJson = this._sendGet("/api/v2/access_management/scopes", params);
+
+        var ret = {
+            hasMore: false,
+            items: []
+        };
+
+        responseJson.result && responseJson.result.forEach(function(item) {
+            ret.items.push({
+                name: item.name,
+                ownerEmail: item.owner_email
+            });
+        });
+
+        ret.hasMore = responseJson.count > (responseJson.page * responseJson.pagesize);
+
+        return ret;
+    },
+    getAvailableApplicationScopes: function() {
+        var responseJson = this._sendGet("/api/v2/access_management/scopes/available");
+
+        var ret = [];
+        responseJson.forEach(function(item) {
+            ret.push({
+                name: item
+            });
+        });        
+
+        return ret;
+    },
+
+    getVulnerabilities: function(registry, digest, page, pagesize) {
+        var params = {
+            registry_name : registry,
+            digest: digest,
+            page : page,
+            pagesize: pagesize
+        };
+
+        var responseJson = this._sendGet("/api/v2/risks/vulnerabilities", params)
+
+        var ret = {
+            hasMore: false,
+            items: []
+        };
+
+        responseJson.result && responseJson.result.forEach(function(item) {
+            ret.items.push({
+                vulnerability: item.name,
+                packageName: item.resource.name,
+				packageVersion: item.resource.version,
+                imageRepository: item.image_repository_name,
+                registry: item.registry,
+                dockerImage: item.image_name,
+                summary: item.description,
+                severity: item.aqua_severity,
+                aquaScore: item.aqua_score,
+                imageBuildDate: item.image_build_date,
+                exploitability: item.exploitability,
+                imageDigest: item.image_digest,
+                os: item.os,
+                osVersion: item.os_version,
+                publishDate: item.publish_date,
+				firstFoundDate: item.first_found_date,
+                solution: item.solution, 
+				lastFoundDate: item.last_found_date,
+                vendor_cvss2_score: item.vendor_cvss2_score,
+                vendor_cvss3_score: item.vendor_cvss3_score
+
+            });
+        });
+
+        ret.hasMore = responseJson.count > (responseJson.page * responseJson.pagesize);
+
+        return ret;
+    },
+    getContainers: function(page, pagesize) {
+        var params = {
+            page : page,
+            pagesize: pagesize
+        };
+
+        var responseJson = this._sendGet("/api/v2/containers", params)
+
+        var ret = {
+            hasMore: false,
+            items: []
+        };
+        responseJson.result && responseJson.result.forEach(function(item) {
+            ret.items.push({
+                id : item.id,
+                imageName : item.image_name,
+                digest : item.image_id
+            });
+        });
+
+        ret.hasMore = responseJson.count > (responseJson.page * responseJson.pagesize);
+
+        return ret;
+    },
+    _sendGet: function(url, queryParams) {
+        var restMessage = new sn_ws.RESTMessageV2();
+
+        restMessage.setHttpMethod("GET");
+        restMessage.setRequestHeader("Content-Type", "application/json");
+        restMessage.setLogLevel("all");
+        restMessage.setRequestHeader("Authorization", "Bearer " + this.token);
+
+        var finalUrl = url.indexOf('http') == 0? url : this.apiUrl + url;
+
+        restMessage.setEndpoint(finalUrl);
+
+        if (queryParams) {
+            for (var param in queryParams) {
+                restMessage.setQueryParameter(param, queryParams[param]);
+            }
+        }
+
+        return this._parseJSON(this._executeWithRetry(restMessage));
+    },
+    _executeWithRetry: function(restMessage) {
+        var errorCodesForReply = [502, 503, 504];
+        var retryAttempts = 3;
+        var retryAttemptsDone = 0;
+        var errorCodeReturned = false;
+
+        do {
+            response = restMessage.execute();
+
+            var statusCode = response.getStatusCode();
+
+            if (statusCode < 200 || statusCode > 299) {
+                errorCodeReturned = true;
+                retryAttemptsDone++;
+                if (errorCodesForReply.indexOf(statusCode) == -1 || retryAttemptsDone >= retryAttempts) {
+                    throw "Invalid Aqua Security API response code: " + statusCode + " (" + restMessage.getEndpoint() + ")";
+                }
+                this._sleep(5000); //wait for 5 sec before next attempt
+            } else {
+                errorCodeReturned = false;
+            }
+
+        } while (errorCodeReturned)
+        return response;
+    },
+    _parseJSON: function(response) {
+        var responseJson = JSON.parse(response.getBody());
+
+        if (!responseJson) {
+            throw "Invalid response received";
+        }
+
+        return responseJson;
+    },
+    _sleep: function(ms) {
+        var endSleep = new GlideDuration().getNumericValue() + ms;
+
+        while ( new GlideDuration().getNumericValue() < endSleep) {
+         //wait 
+        }
+    },
+
+    type: 'AquaSecAPI'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2022-07-25 09:55:13</sys_created_on>
+        <sys_id>7e0ab9d387fcd59003270fad0ebb35ae</sys_id>
+        <sys_mod_count>20</sys_mod_count>
+        <sys_name>AquaSecAPI</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_script_include_7e0ab9d387fcd59003270fad0ebb35ae</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-06-15 07:10:15</sys_updated_on>
+    </sys_script_include>
+</record_update>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>sys_id of ThirdPartyIntegration (sn_sec_int_integration)</description>
+        <ignore_cache>true</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_aqss_vr_intgrtn.integration.id</name>
+        <read_roles/>
+        <suffix>integration.id</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-04-25 06:53:32</sys_created_on>
+        <sys_id>ed83d02787da61509eb885dd0ebb354d</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_aqss_vr_intgrtn.integration.id</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_properties_ed83d02787da61509eb885dd0ebb354d</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-06-15 06:44:45</sys_updated_on>
+        <type>string</type>
+        <value>ab17fef887ecd55003270fad0ebb3552</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=ed83d02787da61509eb885dd0ebb354d"/>
+</record_update>

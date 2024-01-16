@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="9679af4587d96510a498a8e83cbb3534" label="Aqua Security Scopes" max_length="40" name="x_aqss_vr_intgrtn_aqua_security_scopes" type="collection">
+        <element label="Name" max_length="256" name="name" type="string"/>
+        <element label="Owner Email" max_length="64" name="owner_email" type="string"/>
+    </element>
+</database>

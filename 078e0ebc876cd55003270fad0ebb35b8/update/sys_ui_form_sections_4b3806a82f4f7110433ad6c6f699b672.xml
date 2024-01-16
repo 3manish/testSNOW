@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_form_sections form_id="4b3806a82f4f7110433ad6c6f699b672" sys_domain="global" table="sn_vul_container_image_findings" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>manish.admin</sys_created_by>
+            <sys_created_on>2023-12-08 10:37:04</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>0f3806a82f4f7110433ad6c6f699b673</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="sn_vul_container_image_findings" name="sn_vul_container_image_findings" sys_domain="global" view="Default view">4b3806a82f4f7110433ad6c6f699b672</sys_ui_form>
+            <sys_ui_section caption="NULL" display_value="" name="sn_vul_container_image_findings" sys_domain="global" view="Default view">49afa5d8b72630100368d575de11a9e3</sys_ui_section>
+            <sys_updated_by>manish.admin</sys_updated_by>
+            <sys_updated_on>2023-12-08 10:37:04</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>manish.admin</sys_created_by>
+            <sys_created_on>2023-12-08 10:37:04</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4b3806a82f4f7110433ad6c6f699b674</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="sn_vul_container_image_findings" name="sn_vul_container_image_findings" sys_domain="global" view="Default view">4b3806a82f4f7110433ad6c6f699b672</sys_ui_form>
+            <sys_ui_section caption="Aqua Security" display_value="Aqua Security" name="sn_vul_container_image_findings" sys_domain="global" view="Default view">7a48383f976af510a1a07d100153af1c</sys_ui_section>
+            <sys_updated_by>manish.admin</sys_updated_by>
+            <sys_updated_on>2023-12-08 10:37:04</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>sn_vul_container_image_findings</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>manish.admin</sys_created_by>
+            <sys_created_on>2023-12-08 10:37:04</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4b3806a82f4f7110433ad6c6f699b672</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>sn_vul_container_image_findings</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Vulnerability Response and Configuration Compliance for Containers" source="sn_vul_container">2e42728ac8933010ba48c8fb8b6cf08a</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+            <sys_update_name>sys_ui_form_sections_4b3806a82f4f7110433ad6c6f699b672</sys_update_name>
+            <sys_updated_by>manish.admin</sys_updated_by>
+            <sys_updated_on>2023-12-08 10:37:04</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description>Provision URL for staging</description>
+        <ignore_cache>true</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_aqss_vr_intgrtn.staging.provision.url</name>
+        <read_roles/>
+        <suffix>staging.provision.url</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>levchenko.andrey</sys_created_by>
+        <sys_created_on>2023-04-25 09:15:09</sys_created_on>
+        <sys_id>d864b4ef871e61509eb885dd0ebb35bf</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_aqss_vr_intgrtn.staging.provision.url</sys_name>
+        <sys_package display_value="Aqua Sec integration with Vulnerability Response" source="x_aqss_vr_intgrtn">078e0ebc876cd55003270fad0ebb35b8</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Aqua Sec integration with Vulnerability Response">078e0ebc876cd55003270fad0ebb35b8</sys_scope>
+        <sys_update_name>sys_properties_d864b4ef871e61509eb885dd0ebb35bf</sys_update_name>
+        <sys_updated_by>levchenko.andrey</sys_updated_by>
+        <sys_updated_on>2023-04-25 09:15:09</sys_updated_on>
+        <type>string</type>
+        <value>https://prov-dev.cloud.aquasec.com</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=d864b4ef871e61509eb885dd0ebb35bf"/>
+</record_update>
